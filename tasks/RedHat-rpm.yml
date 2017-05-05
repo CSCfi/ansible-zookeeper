@@ -1,15 +1,28 @@
 ---
 - name: Install zookeeper
-  package: name=zookeeper state=installed
+  package: 
+    name: zookeeper 
+    state: installed
 
 - name: Template myid file.
-  template: src=myid.j2 dest={{data_dir}}/myid owner=zookeeper group=zookeeper force="{{ zookeeper_force_myid }}"
+  template: 
+    src: myid.j2 
+    dest: "{{data_dir}}/myid" 
+    owner: zookeeper 
+    group: zookeeper 
+    force: "{{ zookeeper_force_myid }}"
+    backup: yes
   tags: deploy
   notify:
     - Restart zookeeper
 
 - name: Template zookeeper zoo.cfg
-  template: src=zoo.cfg.j2 dest={{ zookeeper_conf_dir }}/zoo.cfg owner=zookeeper group=zookeeper
+  template: 
+    src: zoo.cfg.j2 
+    dest: "{{ zookeeper_conf_dir }}/zoo.cfg" 
+    owner: zookeeper 
+    group: zookeeper
+    backup: yes
   tags: deploy
   notify:
     - Restart zookeeper
