@@ -12,6 +12,9 @@ zookeeper_debian_apt_repositories: []
 apt_cache_timeout: 3600
 zookeeper_register_path_env: false
 
+# By default we install from tarball
+zookeeper_install_tarball: True
+
 client_port: 2181
 init_limit: 5
 sync_limit: 2
