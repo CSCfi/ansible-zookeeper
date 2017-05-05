@@ -9,7 +9,7 @@
     - Restart zookeeper
 
 - name: Template zookeeper zoo.cfg
-  template: src=zoo.cfg.j2 dest={{ zookeeper_dir }}/conf/zoo.cfg owner=zookeeper group=zookeeper
+  template: src=zoo.cfg.j2 dest={{ zookeeper_conf_dir }}/zoo.cfg owner=zookeeper group=zookeeper
   tags: deploy
   notify:
     - Restart zookeeper
