@@ -1,10 +1,6 @@
 ---
-- name: Install OS Packages
-  yum: 
-    name: "{{ item }}" 
-    state: present
-  with_items:
-    - libselinux-python
+- name: Install selinux python3 bindings
+  pip: name=selinux state=latest executable=pip3
 
 - include: RedHat-rpm.yml
   when: zookeeper_install_tarball == False
