@@ -30,9 +30,7 @@ Role Variables
 
 ```yaml
 ---
-ansible_playbook_version: 0.1
-zookeeper_playbook_version: "0.17.0"
-zookeeper_version: 3.4.6
+zookeeper_version: 3.4.12
 zookeeper_url: http://www.us.apache.org/dist/zookeeper/zookeeper-{{zookeeper_version}}/zookeeper-{{zookeeper_version}}.tar.gz
 
 # Flag that selects if systemd or upstart will be used for the init service:
@@ -54,6 +52,8 @@ sync_limit: 2
 tick_time: 2000
 zookeeper_autopurge_purgeInterval: 0
 zookeeper_autopurge_snapRetainCount: 10
+zookeeper_cluster_ports: "2888:3888"
+zookeeper_max_client_connections: 60
 
 data_dir: /var/lib/zookeeper
 log_dir: /var/log/zookeeper
@@ -61,9 +61,10 @@ zookeeper_dir: /opt/zookeeper-{{zookeeper_version}} # or /usr/share/zookeeper wh
 zookeeper_conf_dir: {{zookeeper_dir}} # or /etc/zookeeper when zookeeper_debian_apt_install is true
 zookeeper_tarball_dir: /opt/src
 
+zookeeper_hosts_hostname: "{{inventory_hostname}}"
 # List of dict (i.e. {zookeeper_hosts:[{host:,id:},{host:,id:},...]})
 zookeeper_hosts:
-  - host: "{{inventory_hostname}}" # the machine running
+  - host: "{{zookeeper_hosts_hostname}}" # the machine running
     id: 1
 
 # Dict of ENV settings to be written into the (optional) conf/zookeeper-env.sh
@@ -80,6 +81,20 @@ Example Playbook
 - name: Installing ZooKeeper
   hosts: all
   sudo: yes
+  roles:
+    - role: AnsibleShipyard.ansible-zookeeper
+```
+
+Example Retrieving Tarball From S3
+----------------------------------
+
+```yaml
+- name: Installing ZooKeeper
+  hosts: all
+  sudo: yes
+  vars:
+    zookeeper_archive_s3_bucket: my-s3-bucket
+    zookeeper_archive_s3_object: my/s3/directory/zookeeper-{{zookeeper_version}}.tar.gz
   roles:
     - role: AnsibleShipyard.ansible-zookeeper
 ```
